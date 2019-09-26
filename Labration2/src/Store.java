@@ -38,7 +38,7 @@ public class Store {
 
         MenuOption m3 = new MenuOption();
         m3.text = "Lagersaldo";
-        m3.run = () -> new StoreStock().getTvStock();
+        m3.run = () -> new StoreStock();
         menuList.add(m3);
 //        m3.run = ()-> StoreStock.class.tvStock;
 //        m3.run.menuAction();
