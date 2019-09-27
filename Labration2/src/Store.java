@@ -1,60 +1,51 @@
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class Store {
+    public static Scanner sc = new Scanner(System.in);
     static ArrayList<MenuOption> menuList = new ArrayList<>();
+
     public void Store() {
 
         StoreStock storeStart = new StoreStock();
         storeStart.executeStock();
         while (true) {
-            printMenu();
-            runMenu();
-            testMenu();
+            MenusForPrint.printStart();
+            mainMenu();
+                for (MenuOption menuOption : menuList) {
+                    System.out.println(menuOption.text);
+                }
+            menuChoice();
         }
     }
 
-    void testMenu(){
-        String input = main.sc.nextLine();
+    private void menuChoice(){
+        String input = sc.nextLine();
         int choice = Integer.parseInt(input);
         menuList.get(choice).run.run();
     }
 
-    void runMenu() {
+    private void mainMenu() {
         MenuOption m0 = new MenuOption();
-        m0.text = "Avslutar programmet";
+        m0.text = "0: Avslutar programmet";
         m0.run = ()-> System.exit(0);
         menuList.add(m0);
 
         MenuOption m1 = new MenuOption();
-        m1.text = "Sälj";
+        m1.text = "1: Sälj";
+        m1.run = () -> new PurchaseMenu().purchaseMenu();
         menuList.add(m1);
-//        m1.run.menuAction();
 
         MenuOption m2 = new MenuOption();
-        m2.text = "Beställ";
-        m2.run = () -> new AddItem().addNewTv();
+        m2.text = "2: Beställ";
+        m2.run = () -> new AddItem().AddItem();
         menuList.add(m2);
 
         MenuOption m3 = new MenuOption();
-        m3.text = "Lagersaldo";
-        m3.run = () -> new StoreStock();
+        m3.text = "3: Lagersaldo";
+        m3.run = () -> new GetStoreStockSaldo().getSaldo(sc);
         menuList.add(m3);
-//        m3.run = ()-> StoreStock.class.tvStock;
-//        m3.run.menuAction();
 
-//        MenuOption m4 = new MenuOption();
-//        m4.text = "Sparar till fil";
-//        m4.run = () -> new StoreStock().SaveToFile();
-//        menuList.add(m4);
-    }
-    public void printMenu() {
-        System.out.println("*******************");
-        System.out.println("Patriks Ljud & Bild");
-        System.out.println("");
-        System.out.println("1. Sälj");
-        System.out.println("2. Beställ");
-        System.out.println("3. Lagersaldo\n");
 
     }
 }

@@ -12,4 +12,17 @@ public class Headphones {
         this.brand = brand;
         this.wireless = wireless;
     }
+
+    //<editor-fold desc="Getters">
+    public String getModelName() {
+        return modelName;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+        public boolean isWireless() {
+            return wireless;
+    }
+    //</editor-fold>
 }

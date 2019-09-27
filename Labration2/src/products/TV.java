@@ -2,14 +2,13 @@ package products;
 
 import java.util.Objects;
 
-public class TV  { //extends Dimensions
+public class TV  {
     private String modelName;
     private String brand;
     private int screenSize;
     private String panelType;
     private int resolution; //720, 1080, 2160
     private boolean smartTv;
-//    private Dimensions dimensions;
 
     public TV(String modelName, String brand, int screenSize, String panelType, int resolution, boolean smartTv) {
         this.modelName = modelName;
@@ -18,7 +17,6 @@ public class TV  { //extends Dimensions
         this.panelType = panelType;
         this.resolution = resolution;
         this.smartTv = smartTv;
-//        this.dimensions = dimensions;
     }
 
     //<editor-fold desc="Getters">
@@ -55,7 +53,6 @@ public class TV  { //extends Dimensions
                 "\nPaneltype: "+panelType+
                 "\nResolution: "+resolution+"p"+
                 "\nSmartTv: "+smartTv;
-//                "\n"+ dimensions;
     }
 
     @Override
@@ -69,13 +66,13 @@ public class TV  { //extends Dimensions
                 smartTv == tv.smartTv &&
                 Objects.equals(modelName, tv.modelName) &&
                 Objects.equals(brand, tv.brand) &&
-                Objects.equals(panelType, tv.panelType); //&&
-//                Objects.equals(dimensions, tv.dimensions);
+                Objects.equals(panelType, tv.panelType);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), modelName, brand, screenSize, panelType, resolution, smartTv); //dimensions
+        return Objects.hash(super.hashCode(), modelName, brand, screenSize, panelType, resolution, smartTv);
     }
 }
 

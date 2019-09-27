@@ -4,7 +4,7 @@ public class MenuOption implements MenuAction{
 
     @Override
     public String toString() {
-        return text;
+       return text;
     }
 
     @Override
