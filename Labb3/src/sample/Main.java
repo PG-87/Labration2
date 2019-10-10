@@ -10,11 +10,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        Model model = new Model();
+        loader.setControllerFactory(param -> new Controller(model));
+        Parent root = loader.load();
+        Controller controller = loader.getController();
+        controller.setStage(primaryStage);
         primaryStage.setTitle("Labration 3");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.setResizable(false);
+        controller.init(primaryStage.getScene());
         primaryStage.show();
+
     }
 
 
