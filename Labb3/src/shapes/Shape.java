@@ -4,21 +4,35 @@ import javafx.beans.property.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public abstract class Shapes {
+public abstract class Shape {
 
     private DoubleProperty xpos = new SimpleDoubleProperty();
     private DoubleProperty ypos = new SimpleDoubleProperty();
     private ObjectProperty<Paint> paint = new SimpleObjectProperty<>();
     private StringProperty id = new SimpleStringProperty();
+    private DoubleProperty size = new SimpleDoubleProperty();
 
-    public Shapes(double xpos, double ypos, Paint paint, String id) {
+    public Shape(double xpos, double ypos, Paint paint, String id, double size) {
         setXpos(xpos);
         setYpos(ypos);
         setPaint(paint);
         setId(id);
+        setSize(size);
     }
 
-    public Shapes(Shapes shapes) {
+    public double getSize() {
+        return size.get();
+    }
+
+    public DoubleProperty sizeProperty() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size.set(size);
+    }
+
+    public Shape(Shape shape) {
     }
 
     public double getXpos() {
@@ -68,10 +82,11 @@ public abstract class Shapes {
     public void setId(String id) {
         this.id.set(id);
     }
-    public abstract void draw(GraphicsContext gc);
+
+    public void draw(GraphicsContext gc){}
 
     @Override
     public String toString() {
-        return getId();
+        return getId() + getSize();
     }
 }

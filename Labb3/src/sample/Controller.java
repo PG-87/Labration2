@@ -20,6 +20,8 @@ public class Controller {
     @FXML
     Canvas canvas;
     @FXML
+    TextField textField1;
+    @FXML
     ColorPicker strokePicker;
     @FXML
     ColorPicker fillPicker;
@@ -27,6 +29,10 @@ public class Controller {
     TextField brushSize;
     @FXML
     Button rectangleButton;
+    @FXML
+    Button squareButton;
+    @FXML
+    Button circleButton;
     @FXML
     MenuItem saveMenuItem;
     @FXML
@@ -52,13 +58,13 @@ public class Controller {
     public void initialize(){
         gc = canvas.getGraphicsContext2D();
         strokePicker.setValue(Color.BLACK);
-        canvas.widthProperty().addListener(observable -> Controller.this.drawShapes());
-        canvas.heightProperty().addListener(observable -> drawShapes());
-        model.getShapes().addListener(this::onChanged);
+        model.getShapes().addListener(this::onChanged);;
         listView.setItems(model.getShapes());
+        listView.getItems().addListener(this::onChanged);
+//        textField1.textProperty().bindBidirectional();
     }
 
-    public void onChanged(ListChangeListener.Change<? extends Shapes> c){
+    public void onChanged(ListChangeListener.Change<? extends Shape> c){
         while (c.next()) {
             if (c.wasPermutated()) {
                 for (int i = c.getFrom(); i < c.getTo(); ++i) {
@@ -69,10 +75,10 @@ public class Controller {
                     System.out.println("Updated: " + i + " " + model.getShapes().get(i));
                 }
             } else {
-                for (Shapes removedItem : c.getRemoved()) {
+                for (Shape removedItem : c.getRemoved()) {
                     System.out.println("Removed: " + removedItem);
                 }
-                for (Shapes addedItem : c.getAddedSubList()) {
+                for (Shape addedItem : c.getAddedSubList()) {
                     System.out.println("Added: " + addedItem);
                 }
             }
@@ -84,8 +90,17 @@ public class Controller {
         canvas.setOnMouseClicked(e-> {
             y = e.getY();
             x = e.getX();
-            Rectangle rect = new Rectangle(x,y,100,200, fillPicker.getValue(), "Rectangle");
-            model.getShapes().add(rect);
+            Square rect = new Square(x,y, fillPicker.getValue(), "Rectangle", 20, 10, slider.getValue());
+            model.addShapes(rect);
+            System.out.println(model.getShapes());
+        });
+    }
+    public void squareButtonAction(ActionEvent actionEvent) {
+        canvas.setOnMouseClicked(e-> {
+            y = e.getY();
+            x = e.getX();
+            Square square = new Square(x,y, fillPicker.getValue(), "Square", 10, 10, slider.getValue());
+            model.addShapes(square);
             System.out.println(model.getShapes());
         });
     }
@@ -94,8 +109,8 @@ public class Controller {
         canvas.setOnMouseClicked(e-> {
            y = e.getY();
            x = e.getX();
-            Circle circ = new Circle(x,y,10,fillPicker.getValue(), "Circle");
-            model.getShapes().add(circ);
+            Circle circ = new Circle(x,y,fillPicker.getValue(), "Circle", 10, slider.getValue());
+            model.addShapes(circ);
             System.out.println(model.getShapes());
         });
     }
@@ -118,6 +133,7 @@ public class Controller {
         File path = fileChooser.showOpenDialog(stage);
     }
 
+    //ToDo implentera undo och redo
     public void init(Scene scene) {
         //Capture Ctrl-Z for undo
         scene.addEventFilter(KeyEvent.KEY_PRESSED,
@@ -142,14 +158,16 @@ public class Controller {
     }
 
     public void selectedShape(MouseEvent mouseEvent) {
-
+        listView.setOnMouseClicked(e-> {
+        new ShapeResizer((Shape)listView.getSelectionModel().getSelectedItem(),slider.getValue());
+        drawShapes();
+        });
     }
     public void drawShapes(){
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,canvas.getHeight(), canvas.getWidth());
-        for (Shapes shapes : model.getShapes()){
-                shapes.draw(gc);
+        for (Shape shape : model.getShapes()){
+                shape.draw(gc);
         }
-
     }
 }

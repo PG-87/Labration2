@@ -54,7 +54,8 @@
             <ColorPicker fx:id="fillPicker" promptText="Fill" />
             <TextField fx:id="brushSize" promptText="Bursh size" />
             <Button fx:id="rectangleButton" mnemonicParsing="false" onAction="#rectangleButtonAction" text="Rektangel" />
-            <Button fx:id="cirkelButton" mnemonicParsing="false" onAction="#cirkelButtonAction" text="Cirkel" />
+            <Button fx:id="squareButton" mnemonicParsing="false" onAction="#squareButtonAction" text="Kvadrat" />
+            <Button fx:id="circleButton" mnemonicParsing="false" onAction="#cirkelButtonAction" text="Cirkel" />
          </children>
          <padding>
             <Insets top="5.0" />
@@ -62,6 +63,7 @@
       </VBox>
       <Canvas fx:id="canvas" height="569.0" width="679.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <ListView fx:id="listView" onMouseClicked="#selectedShape" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Slider fx:id="slider" min="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Slider fx:id="slider" max="5.0" min="1.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField fx:id="textfield1" GridPane.rowIndex="1" />
    </children>
 </GridPane>
