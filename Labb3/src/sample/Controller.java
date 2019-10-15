@@ -14,6 +14,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import shapes.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Controller {
 
@@ -61,7 +63,6 @@ public class Controller {
         model.getShapes().addListener(this::onChanged);;
         listView.setItems(model.getShapes());
         listView.getItems().addListener(this::onChanged);
-//        textField1.textProperty().bindBidirectional();
     }
 
     public void onChanged(ListChangeListener.Change<? extends Shape> c){
@@ -122,6 +123,16 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"),
                 new FileChooser.ExtensionFilter(".svg", "*.svg"));
         File path = fileChooser.showSaveDialog(stage);
+        try (FileWriter out = new FileWriter(path)){
+            out.write("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
+                    "<svg width=\"410\" height=\"640\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" +"\n");
+            for (Shape shape : model.getShapes()) {
+                out.write(shape +"\n");
+            }
+            out.write("\n"+"</svg>");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void openFile(ActionEvent actionEvent) {
@@ -131,6 +142,9 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"),
                 new FileChooser.ExtensionFilter(".svg", "*.svg"));
         File path = fileChooser.showOpenDialog(stage);
+//        try (FileReader in = new FileReader(path)){
+//            in.read()
+//        }
     }
 
     //ToDo implentera undo och redo
@@ -160,6 +174,7 @@ public class Controller {
     public void selectedShape(MouseEvent mouseEvent) {
         listView.setOnMouseClicked(e-> {
         new ShapeResizer((Shape)listView.getSelectionModel().getSelectedItem(),slider.getValue());
+        new ShapeRecoloring((Shape)listView.getSelectionModel().getSelectedItem(),fillPicker.getValue());
         drawShapes();
         });
     }
