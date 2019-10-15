@@ -85,8 +85,9 @@ public abstract class Shape {
 
     public void draw(GraphicsContext gc){}
 
-    @Override
     public String toString() {
         return getId() + getSize();
     }
+    public abstract String saveToSvg();
+
 }
