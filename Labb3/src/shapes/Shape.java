@@ -78,4 +78,6 @@ public abstract class Shape implements ShapeResize {
     public String saveToSvg() {
         return null;
     }
+    public abstract String saveToSvg();
+
 }
