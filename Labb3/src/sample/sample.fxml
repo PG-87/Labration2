@@ -31,6 +31,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#newFile" text="New" />
                   <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveFile" text="Save" />
                   <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openFile" text="Open" />
               <MenuItem mnemonicParsing="false" text="Close" />
@@ -61,9 +62,9 @@
             <Insets top="5.0" />
          </padding>
       </VBox>
-      <Canvas fx:id="canvas" height="569.0" width="679.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Canvas fx:id="canvas" height="536.0" width="593.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <ListView fx:id="listView" onMouseClicked="#selectedShape" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Slider fx:id="slider" max="5.0" min="1.0" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Slider fx:id="slider" majorTickUnit="1.0" max="5.0" min="0.5" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="textfield1" GridPane.rowIndex="1" />
    </children>
 </GridPane>

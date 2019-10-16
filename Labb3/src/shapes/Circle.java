@@ -11,17 +11,20 @@ public class Circle extends Shape {
 
     public Circle(double xpos, double ypos, Paint paint, String id, double radius, double size) {
         super(xpos, ypos, paint, id, size);
-        setRadius(radius);
+        setRadius(radius*getSize());
+    }
+
+    @Override
+    public void shapeResize(double size) {
+        setRadius(getRadius()*size);
     }
 
     public double getRadius() {
         return radius.get();
     }
-
     public DoubleProperty radiusProperty() {
         return radius;
     }
-
     public void setRadius(double radius) {
         this.radius.set(radius);
     }
@@ -29,12 +32,18 @@ public class Circle extends Shape {
     @Override
     public void draw(GraphicsContext gc) {
         gc.setFill(getPaint());
-        gc.fillOval(getXpos() - getRadius() * getSize(), getYpos() - getRadius() * getSize(), getRadius() * 2.0 * getSize(), getRadius() * 2.0 * getSize());
+        gc.fillOval(getXpos() - getRadius() * getSize(),
+                getYpos() - getRadius() * getSize(),
+                getRadius() * 2.0 * getSize(),
+                getRadius() * 2.0 * getSize());
     }
 
     @Override
-    public String toString() {
-        return "<circle cx=" + "\"" + getXpos() + "\"" + " " + "cy=" + "\"" + getYpos() + "\"" + " " + "r=" + "\"" + getRadius() + "\"" + " " + "fill=" + "\"" + "#" + getPaint().toString().substring(2, 8) + "\"" + "/>";
-
+    public String saveToSvg() {
+        return "<circle cx=" + "\"" + getXpos() + "\"" + " " +
+                "cy=" + "\"" + getYpos() + "\"" + " " +
+                "r=" + "\"" + getRadius() + "\"" + " " +
+                "fill=" + "\"" + "#" + getPaint().toString().substring(2, 8) + "\"" + "/>";
     }
+
 }

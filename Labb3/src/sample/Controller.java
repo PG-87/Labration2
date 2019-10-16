@@ -36,6 +36,8 @@ public class Controller {
     @FXML
     Button circleButton;
     @FXML
+    MenuItem newItem;
+    @FXML
     MenuItem saveMenuItem;
     @FXML
     MenuItem openMenuItem;
@@ -105,7 +107,6 @@ public class Controller {
             System.out.println(model.getShapes());
         });
     }
-
     public void cirkelButtonAction(ActionEvent actionEvent) {
         canvas.setOnMouseClicked(e-> {
            y = e.getY();
@@ -127,7 +128,7 @@ public class Controller {
             out.write("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
                     "<svg width=\"410\" height=\"640\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" +"\n");
             for (Shape shape : model.getShapes()) {
-                out.write(shape +"\n");
+                out.write(shape.saveToSvg() +"\n");
             }
             out.write("\n"+"</svg>");
         } catch (IOException e) {
@@ -159,7 +160,7 @@ public class Controller {
 
                     public void handle(KeyEvent ke) {
                         if (ctrlZ.match(ke)) {
-                            //Undo
+                            model.getShapes().remove(model.getShapes().size()-1);
                             System.out.println("Undo");
                             ke.consume(); // <-- stops passing the event to next node
                         } else if (ctrlShiftZ.match(ke)) {
@@ -173,16 +174,24 @@ public class Controller {
 
     public void selectedShape(MouseEvent mouseEvent) {
         listView.setOnMouseClicked(e-> {
-        new ShapeResizer((Shape)listView.getSelectionModel().getSelectedItem(),slider.getValue());
+        Shape selectedShape = ((Shape)listView.getSelectionModel().getSelectedItem());
+        selectedShape.shapeResize(slider.getValue());
         new ShapeRecoloring((Shape)listView.getSelectionModel().getSelectedItem(),fillPicker.getValue());
         drawShapes();
         });
     }
     public void drawShapes(){
         gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,canvas.getHeight(), canvas.getWidth());
+        gc.fillRect(0,0,canvas.getWidth(), canvas.getHeight());
         for (Shape shape : model.getShapes()){
                 shape.draw(gc);
         }
     }
+
+    public void newFile(ActionEvent actionEvent) {
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        model.getShapes().removeAll(model.getShapes());
+        }
 }
+

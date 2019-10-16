@@ -8,6 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import shapes.Shape;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 
 public class Model {
 
@@ -32,6 +36,8 @@ public class Model {
         public void addShapes (Shape shape) {
         shapes.add(shape);
     }
+
+    private Stack<Shape> stackShapes = new Stack<>();
 
     private StringProperty selectedItem = new SimpleStringProperty();
         public String getSelectedItem() {

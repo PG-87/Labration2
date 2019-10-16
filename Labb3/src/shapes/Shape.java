@@ -4,7 +4,7 @@ import javafx.beans.property.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public abstract class Shape {
+public abstract class Shape implements ShapeResize {
 
     private DoubleProperty xpos = new SimpleDoubleProperty();
     private DoubleProperty ypos = new SimpleDoubleProperty();
@@ -23,26 +23,19 @@ public abstract class Shape {
     public double getSize() {
         return size.get();
     }
-
     public DoubleProperty sizeProperty() {
         return size;
     }
-
     public void setSize(double size) {
         this.size.set(size);
-    }
-
-    public Shape(Shape shape) {
     }
 
     public double getXpos() {
         return xpos.get();
     }
-
     public DoubleProperty xposProperty() {
         return xpos;
     }
-
     public void setXpos(double xpos) {
         this.xpos.set(xpos);
     }
@@ -50,11 +43,9 @@ public abstract class Shape {
     public double getYpos() {
         return ypos.get();
     }
-
     public DoubleProperty yposProperty() {
         return ypos;
     }
-
     public void setYpos(double ypos) {
         this.ypos.set(ypos);
     }
@@ -62,11 +53,9 @@ public abstract class Shape {
     public Paint getPaint() {
         return paint.get();
     }
-
     public ObjectProperty<Paint> paintProperty() {
         return paint;
     }
-
     public void setPaint(Paint paint) {
         this.paint.set(paint);
     }
@@ -74,19 +63,19 @@ public abstract class Shape {
     public String getId() {
         return id.get();
     }
-
     public StringProperty idProperty() {
         return id;
     }
-
     public void setId(String id) {
         this.id.set(id);
     }
 
     public void draw(GraphicsContext gc){}
 
-    @Override
     public String toString() {
-        return getId() + getSize();
+        return getId() +" Size: "+ getSize();
+    }
+    public String saveToSvg() {
+        return null;
     }
 }
