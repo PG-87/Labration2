@@ -19,13 +19,13 @@ public class Main extends Application {
         primaryStage.setTitle("Labration 3");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.setResizable(false);
-        controller.init(primaryStage.getScene());
+        controller.undoCmd(primaryStage.getScene());
         primaryStage.show();
-
     }
 
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }

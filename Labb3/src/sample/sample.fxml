@@ -9,22 +9,21 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="856.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.4000244140625" minWidth="10.0" prefWidth="119.0000244140625" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="685.2000244140625" minWidth="10.0" prefWidth="627.5999877929687" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="680.7999755859375" minWidth="10.0" prefWidth="162.0000122070312" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.4000244140625" minWidth="10.0" prefWidth="88.39998168945313" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="685.2000244140625" minWidth="10.0" prefWidth="601.2" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="680.7999755859375" minWidth="10.0" prefWidth="172.39999999999998" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="349.59999389648436" minHeight="0.0" prefHeight="25.600006103515625" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="349.59999389648436" minHeight="10.0" prefHeight="42.39999160766602" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="787.1999866485596" minHeight="10.0" prefHeight="535.200008392334" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="349.59999389648436" minHeight="10.0" prefHeight="39.800009155273436" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="787.1999866485596" minHeight="10.0" prefHeight="536.5999908447266" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <MenuBar GridPane.columnSpan="3">
@@ -51,20 +50,17 @@
       </MenuBar>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
          <children>
-            <ColorPicker fx:id="strokePicker" promptText="Linje" />
-            <ColorPicker fx:id="fillPicker" promptText="Fill" />
-            <TextField fx:id="brushSize" promptText="Bursh size" />
-            <Button fx:id="rectangleButton" mnemonicParsing="false" onAction="#rectangleButtonAction" text="Rektangel" />
-            <Button fx:id="squareButton" mnemonicParsing="false" onAction="#squareButtonAction" text="Kvadrat" />
-            <Button fx:id="circleButton" mnemonicParsing="false" onAction="#cirkelButtonAction" text="Cirkel" />
+            <ColorPicker fx:id="fillPicker" onShowing="#colorChange" prefWidth="70.0" promptText="Fill" />
+            <Button fx:id="rectangleButton" mnemonicParsing="false" onAction="#rectangleButtonAction" prefWidth="70.0" text="Rektangel" />
+            <Button fx:id="squareButton" mnemonicParsing="false" onAction="#squareButtonAction" prefWidth="70.0" text="Kvadrat" />
+            <Button fx:id="circleButton" mnemonicParsing="false" onAction="#circleButtonAction" prefWidth="70.0" text="Cirkel" />
          </children>
          <padding>
-            <Insets top="5.0" />
+            <Insets top="10.0" />
          </padding>
       </VBox>
-      <Canvas fx:id="canvas" height="536.0" width="593.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <ListView fx:id="listView" onMouseClicked="#selectedShape" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Slider fx:id="slider" majorTickUnit="1.0" max="5.0" min="0.5" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TextField fx:id="textfield1" GridPane.rowIndex="1" />
+      <Canvas fx:id="canvas" height="536.0" width="599.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Slider fx:id="slider" majorTickUnit="1.0" max="5.0" min="0.5" minorTickCount="5" onMousePressed="#sliderChange" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    </children>
 </GridPane>

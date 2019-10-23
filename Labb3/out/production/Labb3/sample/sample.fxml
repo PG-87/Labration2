@@ -9,7 +9,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -51,17 +50,17 @@
       </MenuBar>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
          <children>
-            <ColorPicker fx:id="fillPicker" onShowing="#colorChange" promptText="Fill" />
-            <Button fx:id="rectangleButton" mnemonicParsing="false" onAction="#rectangleButtonAction" text="Rektangel" />
-            <Button fx:id="squareButton" mnemonicParsing="false" onAction="#squareButtonAction" text="Kvadrat" />
-            <Button fx:id="circleButton" mnemonicParsing="false" onAction="#cirkelButtonAction" text="Cirkel" />
+            <ColorPicker fx:id="fillPicker" onShowing="#colorChange" prefWidth="70.0" promptText="Fill" />
+            <Button fx:id="rectangleButton" mnemonicParsing="false" onAction="#rectangleButtonAction" prefWidth="70.0" text="Rektangel" />
+            <Button fx:id="squareButton" mnemonicParsing="false" onAction="#squareButtonAction" prefWidth="70.0" text="Kvadrat" />
+            <Button fx:id="circleButton" mnemonicParsing="false" onAction="#circleButtonAction" prefWidth="70.0" text="Cirkel" />
          </children>
          <padding>
-            <Insets top="5.0" />
+            <Insets top="10.0" />
          </padding>
       </VBox>
       <Canvas fx:id="canvas" height="536.0" width="599.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Slider fx:id="slider" onMousePressed="#sliderChange" majorTickUnit="1.0" max="5.0" min="0.5" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Slider fx:id="slider" majorTickUnit="1.0" max="5.0" min="0.5" minorTickCount="5" onMousePressed="#sliderChange" showTickLabels="true" showTickMarks="true" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    </children>
 </GridPane>

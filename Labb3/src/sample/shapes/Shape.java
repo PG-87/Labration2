@@ -1,18 +1,18 @@
-package shapes;
+package sample.shapes;
 
 import javafx.beans.property.*;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 
-public abstract class Shape implements ShapeResize {
+public abstract class Shape {
 
     private DoubleProperty xpos = new SimpleDoubleProperty();
     private DoubleProperty ypos = new SimpleDoubleProperty();
-    private ObjectProperty<Paint> paint = new SimpleObjectProperty<>();
+    private ObjectProperty<Color> paint = new SimpleObjectProperty<>();
     private StringProperty id = new SimpleStringProperty();
     private DoubleProperty size = new SimpleDoubleProperty();
 
-    public Shape(double xpos, double ypos, Paint paint, String id, double size) {
+    public Shape(double xpos, double ypos, Color paint, String id, double size) {
         setXpos(xpos);
         setYpos(ypos);
         setPaint(paint);
@@ -50,13 +50,13 @@ public abstract class Shape implements ShapeResize {
         this.ypos.set(ypos);
     }
 
-    public Paint getPaint() {
+    public Color getPaint() {
         return paint.get();
     }
-    public ObjectProperty<Paint> paintProperty() {
+    public ObjectProperty<Color> paintProperty() {
         return paint;
     }
-    public void setPaint(Paint paint) {
+    public void setPaint(Color paint) {
         this.paint.set(paint);
     }
 
@@ -71,13 +71,10 @@ public abstract class Shape implements ShapeResize {
     }
 
     public void draw(GraphicsContext gc){}
-
     public String toString() {
         return getId() +" Size: "+ getSize();
     }
     public String saveToSvg() {
         return null;
     }
-    public abstract String saveToSvg();
-
 }

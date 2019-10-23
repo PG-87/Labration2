@@ -1,22 +1,17 @@
-package shapes;
+package sample.shapes;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 
 public class Circle extends Shape {
 
     private DoubleProperty radius = new SimpleDoubleProperty();
 
-    public Circle(double xpos, double ypos, Paint paint, String id, double radius, double size) {
+    public Circle(double xpos, double ypos, Color paint, String id, double radius, double size) {
         super(xpos, ypos, paint, id, size);
-        setRadius(radius*getSize());
-    }
-
-    @Override
-    public void shapeResize(double size) {
-        setRadius(getRadius()*size);
+        this.radius.setValue(radius);
     }
 
     public double getRadius() {
@@ -42,8 +37,11 @@ public class Circle extends Shape {
     public String saveToSvg() {
         return "<circle cx=" + "\"" + getXpos() + "\"" + " " +
                 "cy=" + "\"" + getYpos() + "\"" + " " +
-                "r=" + "\"" + getRadius() + "\"" + " " +
+                "r=" + "\"" + getRadius()*getSize() + "\"" + " " +
                 "fill=" + "\"" + "#" + getPaint().toString().substring(2, 8) + "\"" + "/>";
     }
-
+    @Override
+        public String toString(){
+            return getId() + " " + String.format("%.1f",getRadius()*getSize());
+}
 }

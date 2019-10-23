@@ -1,7 +1,13 @@
 package sample;
 
+import StackOperations.Change;
+import StackOperations.UndoOperation;
+import StackOperations.UndoShape;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -12,23 +18,18 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import shapes.*;
+import sample.shapes.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Stack;
 
 public class Controller {
 
     @FXML
     Canvas canvas;
     @FXML
-    TextField textField1;
-    @FXML
-    ColorPicker strokePicker;
-    @FXML
     ColorPicker fillPicker;
-    @FXML
-    TextField brushSize;
     @FXML
     Button rectangleButton;
     @FXML
@@ -46,10 +47,10 @@ public class Controller {
     @FXML
     ListView listView;
 
-    GraphicsContext gc;
-    Model model;
-    Stage stage;
-
+    private GraphicsContext gc;
+    private Model model;
+    private Stage stage;
+    private Shape shape;
     private double x, y;
 
     public Controller (Model model){
@@ -61,21 +62,37 @@ public class Controller {
 
     public void initialize(){
         gc = canvas.getGraphicsContext2D();
-        strokePicker.setValue(Color.BLACK);
-        model.getShapes().addListener(this::onChanged);;
-        listView.setItems(model.getShapes());
+        fillPicker.setValue(Color.BLACK);
+        model.getShapeList().addListener(this::onChanged);;
+        listView.setItems(model.getShapeList());
         listView.getItems().addListener(this::onChanged);
+        model.sizeProperty().bind(slider.valueProperty());
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Shape>() {
+            @Override
+            public void changed(ObservableValue<? extends Shape> observable, Shape oldValue, Shape newValue) {
+                if (oldValue != null){
+                    (oldValue).sizeProperty().unbindBidirectional(slider.valueProperty());
+                    (oldValue).paintProperty().unbindBidirectional(fillPicker.valueProperty());
+                }
+                if (newValue != null) {
+                    slider.setValue(newValue.getSize());
+                    slider.valueProperty().bindBidirectional((newValue).sizeProperty());
+                    fillPicker.setValue(newValue.getPaint());
+                    fillPicker.valueProperty().bindBidirectional((newValue).paintProperty());
+                    shape = (newValue);
+                }
+            }});
     }
 
     public void onChanged(ListChangeListener.Change<? extends Shape> c){
         while (c.next()) {
             if (c.wasPermutated()) {
                 for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                    System.out.println("Permuted: " + i + " " + model.getShapes().get(i));
+                    System.out.println("Permuted: " + i + " " + model.getShapeList().get(i));
                 }
             } else if (c.wasUpdated()) {
                 for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                    System.out.println("Updated: " + i + " " + model.getShapes().get(i));
+                    System.out.println("Updated: " + i + " " + model.getShapeList().get(i));
                 }
             } else {
                 for (Shape removedItem : c.getRemoved()) {
@@ -95,7 +112,7 @@ public class Controller {
             x = e.getX();
             Square rect = new Square(x,y, fillPicker.getValue(), "Rectangle", 20, 10, slider.getValue());
             model.addShapes(rect);
-            System.out.println(model.getShapes());
+            Model.undoStack.push(new UndoShape(model.getShapeList(), rect));
         });
     }
     public void squareButtonAction(ActionEvent actionEvent) {
@@ -104,30 +121,39 @@ public class Controller {
             x = e.getX();
             Square square = new Square(x,y, fillPicker.getValue(), "Square", 10, 10, slider.getValue());
             model.addShapes(square);
-            System.out.println(model.getShapes());
+            Model.undoStack.push(new UndoShape(model.getShapeList(), square));
+
         });
     }
-    public void cirkelButtonAction(ActionEvent actionEvent) {
+    public void circleButtonAction(ActionEvent actionEvent) {
         canvas.setOnMouseClicked(e-> {
            y = e.getY();
            x = e.getX();
             Circle circ = new Circle(x,y,fillPicker.getValue(), "Circle", 10, slider.getValue());
             model.addShapes(circ);
-            System.out.println(model.getShapes());
+            Model.undoStack.push(new UndoShape(model.getShapeList(), circ));
         });
     }
 
+    public void newFile(ActionEvent actionEvent) {
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        model.getShapeList().removeAll(model.getShapeList());
+        Model.undoStack.clear();
+    }
     public void saveFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+File.separator + "Documents"));
         fileChooser.setTitle("Save File");
+        fileChooser.setInitialFileName("Svg Labration3");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All files", "*.*"),
-                new FileChooser.ExtensionFilter(".svg", "*.svg"));
+                new FileChooser.ExtensionFilter(".svg", "*.svg"),
+                new FileChooser.ExtensionFilter("All files", "*.*"));
         File path = fileChooser.showSaveDialog(stage);
         try (FileWriter out = new FileWriter(path)){
             out.write("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
-                    "<svg width=\"410\" height=\"640\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" +"\n");
-            for (Shape shape : model.getShapes()) {
+                    "<svg width=\""+canvas.getWidth()+"\" height=\""+canvas.getHeight()+"\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" +"\n");
+            for (Shape shape : model.getShapeList()) {
                 out.write(shape.saveToSvg() +"\n");
             }
             out.write("\n"+"</svg>");
@@ -135,7 +161,6 @@ public class Controller {
             e.printStackTrace();
         }
     }
-
     public void openFile(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
@@ -143,14 +168,9 @@ public class Controller {
                 new FileChooser.ExtensionFilter("All files", "*.*"),
                 new FileChooser.ExtensionFilter(".svg", "*.svg"));
         File path = fileChooser.showOpenDialog(stage);
-//        try (FileReader in = new FileReader(path)){
-//            in.read()
-//        }
     }
 
-    //ToDo implentera undo och redo
-    public void init(Scene scene) {
-        //Capture Ctrl-Z for undo
+    public void undoCmd(Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED,
                 new EventHandler<KeyEvent>() {
                     final KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z,
@@ -160,7 +180,8 @@ public class Controller {
 
                     public void handle(KeyEvent ke) {
                         if (ctrlZ.match(ke)) {
-                            model.getShapes().remove(model.getShapes().size()-1);
+                            if(!Model.undoStack.empty())
+                            Model.undoStack.pop().undo();
                             System.out.println("Undo");
                             ke.consume(); // <-- stops passing the event to next node
                         } else if (ctrlShiftZ.match(ke)) {
@@ -171,27 +192,20 @@ public class Controller {
                     }
                 });
     }
-
-    public void selectedShape(MouseEvent mouseEvent) {
-        listView.setOnMouseClicked(e-> {
-        Shape selectedShape = ((Shape)listView.getSelectionModel().getSelectedItem());
-        selectedShape.shapeResize(slider.getValue());
-        new ShapeRecoloring((Shape)listView.getSelectionModel().getSelectedItem(),fillPicker.getValue());
-        drawShapes();
-        });
+    public void sliderChange(MouseEvent contextMenuEvent) {
+        if (shape != null)
+        Model.undoStack.push(new UndoOperation(shape, shape.getSize(), shape.getPaint() ));
     }
+    public void colorChange(Event event) {
+        Model.undoStack.push(new UndoOperation(shape, shape.getSize(), shape.getPaint() ));
+    }
+
     public void drawShapes(){
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,canvas.getWidth(), canvas.getHeight());
-        for (Shape shape : model.getShapes()){
-                shape.draw(gc);
+        for (Shape shape : model.getShapeList()){
+            shape.draw(gc);
         }
     }
-
-    public void newFile(ActionEvent actionEvent) {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
-        model.getShapes().removeAll(model.getShapes());
-        }
 }
 
